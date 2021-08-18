@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+mport React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { loginUser } from "../../../_actions/user_actions";
 import { Formik } from 'formik';
@@ -10,21 +10,15 @@ const { Title } = Typography;
 
 function LoginPage(props) {
   const dispatch = useDispatch();
-  const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
-
+  
   const [formErrorMessage, setFormErrorMessage] = useState('')
-  const [rememberMe, setRememberMe] = useState(rememberMeChecked)
-
-  const handleRememberMe = () => {
-    setRememberMe(!rememberMe)
-  };
-
-  const initialEmail = localStorage.getItem("rememberMe") ? localStorage.getItem("rememberMe") : '';
+  
+  
 
   return (
     <Formik
       initialValues={{
-        email: initialEmail,
+        email: '',
         password: '',
       }}
       validationSchema={Yup.object().shape({
@@ -35,7 +29,7 @@ function LoginPage(props) {
           .min(6, 'Password must be at least 6 characters')
           .required('Password is required'),
       })}
-      onSubmit={(values, { setSubmitting }) => {
+      onSubmit={(values) => {
         setTimeout(() => {
           let dataToSubmit = {
             email: values.email,
@@ -61,22 +55,12 @@ function LoginPage(props) {
                 setFormErrorMessage("")
               }, 3000);
             });
-          setSubmitting(false);
+         
         }, 500);
       }}
     >
       {props => {
-        const {
-          values,
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset,
-        } = props;
+        
         return (
           <div className="app">
 
@@ -90,15 +74,9 @@ function LoginPage(props) {
                   placeholder="Enter your email"
                   type="email"
                   value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.email && touched.email ? 'text-input error' : 'text-input'
-                  }
+                  
                 />
-                {errors.email && touched.email && (
-                  <div className="input-feedback">{errors.email}</div>
-                )}
+                
               </Form.Item>
 
               <Form.Item required>
@@ -107,16 +85,9 @@ function LoginPage(props) {
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   placeholder="Enter your password"
                   type="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={
-                    errors.password && touched.password ? 'text-input error' : 'text-input'
-                  }
+                 
                 />
-                {errors.password && touched.password && (
-                  <div className="input-feedback">{errors.password}</div>
-                )}
+                
               </Form.Item>
 
               {formErrorMessage && (
@@ -124,10 +95,8 @@ function LoginPage(props) {
               )}
 
               <Form.Item>
-                <Checkbox id="rememberMe" onChange={handleRememberMe} checked={rememberMe} >Remember me</Checkbox>
-                <a className="login-form-forgot" href="/reset_user" style={{ float: 'right' }}>
-                  forgot password
-                  </a>
+                
+               
                 <div>
                   <Button type="primary" htmlType="submit" className="login-form-button" style={{ minWidth: '100%' }} disabled={isSubmitting} onSubmit={handleSubmit}>
                     Log in
@@ -144,5 +113,3 @@ function LoginPage(props) {
 };
 
 export default withRouter(LoginPage);
-
-
